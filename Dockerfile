@@ -1,6 +1,6 @@
 # Build context: bu repo kökü (EposDashboard.Api.csproj ile aynı klasör).
 #   docker build -t epos-api:latest .
-#   docker run -p 8080:8080 -e ConnectionStrings__DefaultConnection=... epos-api:latest
+#   docker run -p 8081:8080 -e ConnectionStrings__DefaultConnection=... epos-api:latest
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src

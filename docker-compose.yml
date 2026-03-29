@@ -1,34 +1,36 @@
-# Build context: bu repo kökü.
-#   cp .env.example .env   # şifreleri değiştirin
-#   docker compose up -d --build
+# cp .env.example .env  → MSSQL_HOST ve MSSQL_PASSWORD doldurun (veya yerleşik SQL ile örnek değerler)
 #
-# API: http://localhost:8080  — SQL ilk açılışta birkaç saniye sürebilir; api restart: on-failure ile tekrar dener.
+# Sadece API:  docker compose up -d --build
+# SQL bu repoda: docker compose --profile bundled-db up -d --build
+#
+# API: http://localhost:${API_HOST_PORT:-8081}
+# Harici sqlserver ile aynı ağ: docker network connect <ağ> <api_konteyneri>
 
 services:
   sqlserver:
+    profiles: ["bundled-db"]
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-PosDemo_Sql_2026_Strong!}
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-EposBundledSa_2026_kQ8mN2pR5vL9}
     ports:
-      - "1433:1433"
+      - "${MSSQL_HOST_PORT:-1433}:1433"
     volumes:
       - epos_sql_data:/var/opt/mssql
 
   api:
     build: .
-    depends_on:
-      - sqlserver
     restart: on-failure
+    env_file:
+      - .env
     ports:
-      - "8080:8080"
+      - "${API_HOST_PORT:-8081}:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:8080
-      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=PosDemoDb;User Id=sa;Password=${MSSQL_SA_PASSWORD:-PosDemo_Sql_2026_Strong!};TrustServerCertificate=True;MultipleActiveResultSets=true"
-      Jwt__Secret: ${JWT_SECRET:-PosDemoJwt_ChangeInProduction_Min32Chars_Required}
-      Jwt__Issuer: ${JWT_ISSUER:-PosDemo}
-      Jwt__Audience: ${JWT_AUDIENCE:-PosDemo}
+      Jwt__Secret: "${JWT_SECRET:-EposJwt_DevOnly_7kN2mP9qR4vL8xW3bH6jF5sD1yT0cA_gU4oI7nM}"
+      Jwt__Issuer: "${JWT_ISSUER:-PosDemo}"
+      Jwt__Audience: "${JWT_AUDIENCE:-PosDemo}"
 
 volumes:
   epos_sql_data:

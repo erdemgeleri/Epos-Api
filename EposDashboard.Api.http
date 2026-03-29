@@ -1,7 +1,17 @@
 @host = http://localhost:5118
+@dockerHost = http://localhost:8081
 
-### Login (test admin)
+### Login (test admin) — dotnet run
 POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@posdemo.local",
+  "password": "Admin123!"
+}
+
+### Login (Docker Compose, host port 8081)
+POST {{dockerHost}}/api/auth/login
 Content-Type: application/json
 
 {

@@ -14,7 +14,7 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptio
 builder.Services.Configure<SeedOptions>(builder.Configuration.GetSection(SeedOptions.SectionName));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(SqlConnectionStringResolver.Resolve(builder.Configuration)));
 
 builder.Services.AddSingleton<AppPasswordHasher>();
 builder.Services.AddSingleton<JwtTokenService>();
