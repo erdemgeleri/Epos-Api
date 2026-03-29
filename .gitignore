@@ -15,4 +15,4 @@ out/
 **/appsettings.*.local.json
 
 ## SPA copy (optional local publish)
-EposDashboard.Api/wwwroot/
+wwwroot/
