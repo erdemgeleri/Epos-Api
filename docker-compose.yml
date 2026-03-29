@@ -1,0 +1,34 @@
+# Build context: bu repo kökü.
+#   cp .env.example .env   # şifreleri değiştirin
+#   docker compose up -d --build
+#
+# API: http://localhost:8080  — SQL ilk açılışta birkaç saniye sürebilir; api restart: on-failure ile tekrar dener.
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-PosDemo_Sql_2026_Strong!}
+    ports:
+      - "1433:1433"
+    volumes:
+      - epos_sql_data:/var/opt/mssql
+
+  api:
+    build: .
+    depends_on:
+      - sqlserver
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=PosDemoDb;User Id=sa;Password=${MSSQL_SA_PASSWORD:-PosDemo_Sql_2026_Strong!};TrustServerCertificate=True;MultipleActiveResultSets=true"
+      Jwt__Secret: ${JWT_SECRET:-PosDemoJwt_ChangeInProduction_Min32Chars_Required}
+      Jwt__Issuer: ${JWT_ISSUER:-PosDemo}
+      Jwt__Audience: ${JWT_AUDIENCE:-PosDemo}
+
+volumes:
+  epos_sql_data:

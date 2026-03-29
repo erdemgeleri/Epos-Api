@@ -1,0 +1,12 @@
+**/.git
+**/.vs
+**/bin
+**/obj
+**/out
+**/*.user
+**/.env
+**/appsettings.*.local.json
+**/tools
+**/node_modules
+**/wwwroot
+**/*.md

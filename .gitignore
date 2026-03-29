@@ -13,6 +13,7 @@ out/
 
 ## Local secrets
 **/appsettings.*.local.json
+.env
 
 ## SPA copy (optional local publish)
 wwwroot/
