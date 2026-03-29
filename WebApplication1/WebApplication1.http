@@ -1,0 +1,19 @@
+@host = http://localhost:5118
+
+### Login (test admin)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@posdemo.local",
+  "password": "Admin123!"
+}
+
+### Me (Authorization: Bearer <token>)
+# GET {{host}}/api/auth/me
+# Authorization: Bearer 
+
+### Catalog
+GET {{host}}/api/catalog/businesses
+
+###

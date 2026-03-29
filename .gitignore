@@ -1,0 +1,18 @@
+## .NET
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userosscache
+.vs/
+*.dll
+*.pdb
+*.cache
+*.log
+
+## Local secrets
+**/appsettings.*.local.json
+
+## SPA copy (optional local publish)
+WebApplication1/wwwroot/
