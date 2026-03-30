@@ -1,4 +1,4 @@
-namespace WebApplication1.Entities;
+﻿namespace WebApplication1.Entities;
 
 public sealed class User
 {
@@ -7,7 +7,6 @@ public sealed class User
     public string PasswordHash { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
     public UserRole Role { get; set; }
-    /// <summary>İşletme kullanıcıları için bağlı oldukları işletme.</summary>
     public Guid? BusinessId { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTimeOffset CreatedAt { get; set; }

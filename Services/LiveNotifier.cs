@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using WebApplication1.Hubs;
 
 namespace WebApplication1.Services;
 
-/// <summary>Scoped: IHubContext çözümü için uygun ömür.</summary>
 public sealed class LiveNotifier : ILiveNotifier
 {
     private readonly IHubContext<LiveHub> _hubContext;

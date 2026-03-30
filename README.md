@@ -1,48 +1,59 @@
-# Epos-Api
+# EposDashboard API - Local Calistirma Rehberi
 
-ASP.NET Core 9 Web API (`EposDashboard.Api.csproj`) — çözüm dosyası ile aynı klasörde.
+Bu proje ASP.NET Core 9 Web API uygulamasidir.
 
-## Klasör yapısı
+## Ozellikler
 
-| Yol | Açıklama |
-|-----|----------|
-| `EposDashboard.Api.sln` | Visual Studio çözümü |
-| `EposDashboard.Api.csproj` | API projesi |
-| `Controllers/`, `Data/`, … | Uygulama kodu |
-| `tools/HashPassword/` | İsteğe bağlı: şifre hash CLI (`dotnet run --project tools/HashPassword`) |
+- JWT tabanli kimlik dogrulama ve rol bazli yetkilendirme (Admin, Isletme, Musteri)
+- Isletme, urun, siparis ve kullanici yonetimi icin REST API endpointleri
+- SignalR ile gercek zamanli olaylar (siparis, urun degisimi, sohbet)
+- Isletme ve musteri arasinda canli sohbet yapisi (conversation ve typing olaylari)
+- Entity Framework Core + SQL Server ile veri katmani
+- Uygulama acilisinda migration ve demo veri seed islemleri
+- Gelistirme ortaminda OpenAPI dokumani (`/openapi/v1.json`)
 
-`tools` ana projeden **hariç tutulur** (`csproj` içinde `Compile Remove`); API ile karışmaz.
+## Gereksinimler
 
-## Çalıştırma
+- .NET SDK 9.0
+- SQL Server (LocalDB, SQL Server Express veya SQL Server Developer)
+
+## 1) Veritabani baglantisini kontrol et
+
+Varsayilan baglanti dizesi `appsettings.json` dosyasindadir:
+
+`Server=localhost;Database=PosDemoDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true`
+
+SQL Server instance'in farkliysa `appsettings.json` icindeki `ConnectionStrings:DefaultConnection` degerini guncelle.
+
+## 2) Projeyi calistir
+
+Proje klasorunde terminal acip calistir:
 
 ```bash
+dotnet restore
 dotnet run
 ```
 
-## Docker
+Uygulama acilista migrationlari uygular ve demo verileri otomatik ekler.
 
-Tek dosya: **`docker-compose.yml`**.
+## 3) API'nin ayakta oldugunu dogrula
 
-1. `.env.example` → `.env`. **`MSSQL_HOST`**, **`MSSQL_PASSWORD`** (ve gerekirse `MSSQL_USER`, `MSSQL_DATABASE`) — connection string’i uygulama `SqlConnectionStringBuilder` ile oluşturur; `;` / `=` içeren parolaları elle yazmana gerek kalmaz.
-2. `docker compose up -d --build` — sadece API; SQL sizde (başka konteyner / sunucu).
+Tarayicida veya Postman ile asagidaki endpoint'i ac:
 
-**Bu repoda SQL de gelsin** (profil `bundled-db`):
+- `GET /openapi/v1.json`
 
-```bash
-docker compose --profile bundled-db up -d --build
-```
+Calistigi anda terminalde `Now listening on ...` satirini gorursun.
 
-Yerleşik SQL için `.env` örneğindeki gibi `MSSQL_HOST=sqlserver` ve `MSSQL_PASSWORD` ile `MSSQL_SA_PASSWORD` aynı olmalı.
+## Demo giris bilgileri
 
-İsterseniz `MSSQL_HOST` kullanmadan yalnızca **`ConnectionStrings__DefaultConnection`** ortam değişkeni de verebilirsiniz (`.env` içinde `MSSQL_HOST` satırını kaldırın veya boş bırakın).
+Seed edilen hazir kullanicilar:
 
-**Mevcut `sqlserver` konteynerı** ile API aynı Docker kullanıcı tanımlı ağda değilse, konteyner adı çözülmez; gerekirine API konteynerını o ağa bağlayın: `docker network connect <ağ_adı> <epos_api_konteyneri>` (`docker inspect sqlserver` ile ağ adına bakın).
+- Admin: `admin@posdemo.local`
+- Isletme: `business@posdemo.local`
+- Musteri: `customer@posdemo.local`
+- Sifre: `PosDemo2026!`
 
-- API: `http://localhost:8081` (`API_HOST_PORT`)
+## Notlar
 
-**Sadece imaj**
-
-```bash
-docker build -t epos-api:latest .
-docker run -p 8081:8080 -e MSSQL_HOST=sqlserver -e MSSQL_PASSWORD=... -e MSSQL_USER=sa epos-api:latest
-```
+- CORS ayari local test icin acik durumdadir.
+- `appsettings.Development.json` lokal ortam log seviyelerini icerir.

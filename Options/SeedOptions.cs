@@ -1,4 +1,4 @@
-using WebApplication1;
+﻿using WebApplication1;
 
 namespace WebApplication1.Options;
 
@@ -6,7 +6,6 @@ public sealed class SeedOptions
 {
     public const string SectionName = "Seed";
 
-    /// <summary>appsettings ile override edilebilir; varsayılanlar <see cref="DemoCredentials"/>.</summary>
     public string AdminEmail { get; set; } = DemoCredentials.AdminEmail;
     public string AdminPassword { get; set; } = DemoCredentials.Password;
     public string AdminDisplayName { get; set; } = DemoCredentials.AdminDisplayName;

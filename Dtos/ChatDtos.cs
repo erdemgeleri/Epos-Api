@@ -1,8 +1,7 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Dtos;
 
-/// <param name="CustomerUserId">İşletme kullanıcısı için hedef müşteri. Müşteri için boş bırakılır.</param>
 public sealed record SendChatMessageRequest(
     [Required] Guid BusinessId,
     Guid? CustomerUserId,

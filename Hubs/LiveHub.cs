@@ -1,4 +1,4 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 namespace WebApplication1.Hubs;
@@ -8,7 +8,6 @@ public sealed class LiveHub : Hub
 {
     public const string AdminGroup = "role-admin";
 
-    /// <summary>Tüm müşteri bağlantıları — katalog stok güncellemeleri.</summary>
     public const string CustomerCatalogGroup = "role-customer-catalog";
 
     public static string BusinessGroup(Guid businessId) => $"business-{businessId}";
@@ -20,7 +19,7 @@ public sealed class LiveHub : Hub
     {
         if (!IsAdmin())
         {
-            throw new HubException("Yalnızca admin bu kanala katılabilir.");
+            throw new HubException("YalnÄ±zca admin bu kanala katÄ±labilir.");
         }
 
         await Groups.AddToGroupAsync(Context.ConnectionId, AdminGroup);
@@ -31,7 +30,7 @@ public sealed class LiveHub : Hub
         var businessId = GetBusinessId();
         if (!businessId.HasValue)
         {
-            throw new HubException("İşletme kullanıcısı değilsiniz.");
+            throw new HubException("Ä°ÅŸletme kullanÄ±cÄ±sÄ± deÄŸilsiniz.");
         }
 
         await Groups.AddToGroupAsync(Context.ConnectionId, BusinessGroup(businessId.Value));
@@ -44,7 +43,6 @@ public sealed class LiveHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, CustomerCatalogGroup);
     }
 
-    /// <summary>İşletme–müşteri sohbet odası (her iki taraf + admin genel dinlemede).</summary>
     public async Task JoinConversation(Guid businessId, Guid customerUserId)
     {
         var userId = GetUserId();
@@ -66,10 +64,9 @@ public sealed class LiveHub : Hub
             return;
         }
 
-        throw new HubException("Bu sohbete erişim izniniz yok.");
+        throw new HubException("Bu sohbete eriÅŸim izniniz yok.");
     }
 
-    /// <summary>Karşı tarafa yazıyor durumu (müşteri ↔ işletme).</summary>
     public async Task SetChatTyping(Guid businessId, Guid customerUserId, bool isTyping)
     {
         var userId = GetUserId();
@@ -102,7 +99,7 @@ public sealed class LiveHub : Hub
             return;
         }
 
-        throw new HubException("Bu sohbet için yazıyor bildirimi gönderemezsiniz.");
+        throw new HubException("Bu sohbet iÃ§in yazÄ±yor bildirimi gÃ¶nderemezsiniz.");
     }
 
     private Guid GetUserId()
@@ -111,7 +108,7 @@ public sealed class LiveHub : Hub
             ?? Context.User?.FindFirst("sub")?.Value;
         if (string.IsNullOrEmpty(sub) || !Guid.TryParse(sub, out var id))
         {
-            throw new HubException("Kullanıcı tanımlanamadı.");
+            throw new HubException("KullanÄ±cÄ± tanÄ±mlanamadÄ±.");
         }
 
         return id;

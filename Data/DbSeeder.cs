@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WebApplication1.Entities;
 using WebApplication1;
 using WebApplication1.Options;
@@ -22,7 +22,7 @@ public static class DbSeeder
             {
                 Id = DemoCredentials.DemoBusinessId,
                 Name = seed.DemoBusinessName,
-                Description = "Demo ortamı için örnek işletme.",
+                Description = "Demo ortamÄ± iÃ§in Ã¶rnek iÅŸletme.",
                 IsActive = true,
                 CreatedAt = DateTimeOffset.UtcNow,
             });
@@ -63,10 +63,6 @@ public static class DbSeeder
             cancellationToken);
     }
 
-    /// <summary>
-    /// Demo kullanıcı yoksa oluşturur; varsa şifre ve alanları günceller (kod/appsettings'teki şifre değişince
-    /// veritabanında eski hash kaldığında giriş hatası oluşmasın diye).
-    /// </summary>
     private static async Task UpsertDemoUserAsync(
         AppDbContext db,
         AppPasswordHasher passwordHasher,
